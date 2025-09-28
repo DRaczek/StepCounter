@@ -1,10 +1,9 @@
 ﻿using Android.App;
 using Android.Content;
-using Android.Content.PM;
 using Android.OS;
 using AndroidX.Core.App;
-using Plugin.Maui.Pedometer;
-using System;
+using StepCounter.Services;
+using Android.Content.PM;
 
 namespace StepCounter.Platforms.Android
 {
@@ -18,35 +17,30 @@ namespace StepCounter.Platforms.Android
         private Timer? _timer;
         private const string ChannelId = "pedometer_service_channel";
         private const int NotificationId = 1001;
-        private IPedometer? _pedometer;
+        private StepCounterService? _stepCounterService;
 
         public override void OnCreate()
         {
             base.OnCreate();
             CreateNotificationChannel();
 
-            var notification = BuildNotification();
+            _stepCounterService = MauiApplication.Current.Services.GetService<StepCounterService>();
+
+            var notification = BuildNotification(_stepCounterService?.DailySteps ?? 0);
             StartForeground(NotificationId, notification);
 
-            // Inicjalizacja pedometru
-            _pedometer = Pedometer.Default;
-            _pedometer.ReadingChanged += OnPedometerReadingChanged;
-            _pedometer.Start();
-
-            // Timer opcjonalny, jeśli chcesz wykonywać dodatkowe operacje cyklicznie
             _timer = new Timer(
-                callback: state => { /* tu możesz np. zapisywać kroki do bazy */ },
+                callback: state =>
+                {
+                    var steps = _stepCounterService?.DailySteps ?? 0;
+                    var updatedNotification = BuildNotification(steps);
+                    var notificationManager = NotificationManagerCompat.From(this);
+                    notificationManager.Notify(NotificationId, updatedNotification);
+                },
                 state: null,
                 dueTime: TimeSpan.Zero,
-                period: TimeSpan.FromSeconds(1)
+                period: TimeSpan.FromMinutes(1)
             );
-        }
-
-        private void OnPedometerReadingChanged(object? sender, PedometerData reading)
-        {
-            // Tutaj masz dostęp do reading.NumberOfSteps
-            // Możesz zapisać do bazy, wysłać broadcast, itp.
-            Console.WriteLine("StepCounter", $"Kroki: {reading.NumberOfSteps}");
         }
 
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
@@ -60,11 +54,6 @@ namespace StepCounter.Platforms.Android
         {
             base.OnDestroy();
             _timer?.Dispose();
-            if (_pedometer != null)
-            {
-                _pedometer.ReadingChanged -= OnPedometerReadingChanged;
-                _pedometer.Stop();
-            }
         }
 
         private void CreateNotificationChannel()
@@ -86,18 +75,18 @@ namespace StepCounter.Platforms.Android
             }
         }
 
-        private Notification BuildNotification()
+        private Notification BuildNotification(int steps)
         {
             var builder = new NotificationCompat.Builder(this, ChannelId)
                 .SetContentTitle("Krokomierz działa")
-                .SetContentText("Zliczanie kroków w tle")
+                .SetContentText($"Dzisiejsze kroki: {steps}")
                 .SetSmallIcon(global::Android.Resource.Drawable.IcDialogInfo)
                 .SetOngoing(true)
                 .SetPriority((int)NotificationPriority.High)
                 .SetCategory(NotificationCompat.CategoryService);
 
             return builder.Build();
-            }
+        }
     }
 }
 
