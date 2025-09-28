@@ -2,52 +2,24 @@ using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Plugin.Maui.Pedometer;
+using StepCounter.Services;
 
 namespace StepCounter.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
-        [ObservableProperty]
-        private int steps;
+        private readonly StepCounterService stepCounterService;
 
-        [ObservableProperty]
-        private bool isCounting = false;
+        public int DailySteps => stepCounterService.DailySteps;
 
-        private int previousNumberOfSteps = 0;
-
-        readonly IPedometer pedometer;
-        public MainViewModel(IPedometer pedometer)
+        public MainViewModel(StepCounterService stepCounterService)
         {
-            this.pedometer = pedometer;
-        }
-            
-        [RelayCommand]
-        public void Start()
-        {
-            if (IsCounting == false) Reset();
-            pedometer.ReadingChanged += (sender, reading) =>
+            this.stepCounterService = stepCounterService;
+            stepCounterService.PropertyChanged += (s, e) =>
             {
-                int value = reading.NumberOfSteps;
-                int diff =  value - previousNumberOfSteps;
-                previousNumberOfSteps = reading.NumberOfSteps;
-                Steps += diff;
+                if (e.PropertyName == nameof(StepCounterService.DailySteps))
+                    OnPropertyChanged(nameof(DailySteps));
             };
-
-            pedometer.Start();
-            IsCounting = true;
-        }
-
-        [RelayCommand]
-        public void Stop()
-        {
-            pedometer.Stop();
-            IsCounting = false;
-        }
-
-        [RelayCommand]
-        public void Reset()
-        {
-            Steps = 0;
         }
     }
 }
