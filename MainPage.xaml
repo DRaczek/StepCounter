@@ -7,13 +7,7 @@
 
     <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
         <Label Text="Kroki" FontAttributes="Bold" FontSize="20" HorizontalOptions="Center" />
-        <Label Text="{Binding Steps}" FontSize="48" HorizontalOptions="Center" />
-
-        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-            <Button Text="Start" Command="{Binding StartCommand}" />
-            <Button Text="Stop" Command="{Binding StopCommand}"/>
-            <Button Text="Reset" Command="{Binding ResetCommand}" />
-        </HorizontalStackLayout>
+        <Label Text="{Binding DailySteps}" FontSize="48" HorizontalOptions="Center" />
 
         <Label Text="Uwaga: wymagane uprawnienia i obsługa urządzenia z sensorami." FontSize="12" HorizontalOptions="Center" TextColor="Gray"/>
     </VerticalStackLayout>
