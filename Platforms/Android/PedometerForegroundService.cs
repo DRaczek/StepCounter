@@ -63,7 +63,7 @@ namespace StepCounter.Platforms.Android
                 var channel = new NotificationChannel(
                     ChannelId,
                     "Pedometer Service",
-                    NotificationImportance.Max
+                    NotificationImportance.Low
                 )
                 {
                     Description = "Foreground service for step counting"
@@ -82,7 +82,8 @@ namespace StepCounter.Platforms.Android
                 .SetContentText($"Dzisiejsze kroki: {steps}")
                 .SetSmallIcon(global::Android.Resource.Drawable.IcDialogInfo)
                 .SetOngoing(true)
-                .SetPriority((int)NotificationPriority.High)
+                .SetSilent(true)
+                .SetPriority((int)NotificationPriority.Low)
                 .SetCategory(NotificationCompat.CategoryService);
 
             return builder.Build();
