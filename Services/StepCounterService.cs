@@ -1,5 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Timers;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Plugin.Maui.Pedometer;
+using StepCounter.Data;
 using StepCounter.Models;
 
 namespace StepCounter.Services
@@ -10,12 +13,14 @@ namespace StepCounter.Services
         private int dailySteps;
 
         private readonly IPedometer pedometer;
+        private readonly StepDatabase stepDatabase;
         private int previousNumberOfSteps = 0;
         private DateTime lastResetDate = DateTime.Today;
 
-        public StepCounterService(IPedometer pedometer)
+        public StepCounterService(IPedometer pedometer, StepDatabase stepDatabase)
         {
             this.pedometer = pedometer;
+            this.stepDatabase = stepDatabase;
             pedometer.ReadingChanged += OnReadingChanged;
 
             pedometer.Start();
@@ -23,22 +28,39 @@ namespace StepCounter.Services
 
         private void OnReadingChanged(object? sender, PedometerData reading)
         {
-            CheckMidnightReset();
-            int value = reading.NumberOfSteps;
-            int diff = value - previousNumberOfSteps;
-            previousNumberOfSteps = value;
+            if (reading == null) return;
+
+            int diff = reading.NumberOfSteps - previousNumberOfSteps;
+            previousNumberOfSteps = reading.NumberOfSteps;
+
             if (diff > 0)
                 DailySteps += diff;
         }
 
-        private void CheckMidnightReset()
+        private void ResetIfNewDay()
         {
-            if (DateTime.Today > lastResetDate)
-            {
-                DailySteps = 0;
-                previousNumberOfSteps = 0;
-                lastResetDate = DateTime.Today;
-            }
+            if (DateTime.Today <= lastResetDate) return;
+
+            DailySteps = 0;
+            previousNumberOfSteps = 0;
+            lastResetDate = DateTime.Today;
+        }
+
+        public async Task SaveDailyStepsToDbAsync()
+        {
+            ResetIfNewDay();
+            var today = DateTime.Today;
+            var stepEntity = await stepDatabase.GetStepForDateAsync(today)
+                             ?? new DailyStep { Date = today };
+
+            stepEntity.Steps = DailySteps;
+
+            await stepDatabase.SaveStepAsync(stepEntity);
+        }
+
+        public void Dispose()
+        {
+            pedometer.ReadingChanged -= OnReadingChanged;
         }
     }
 }

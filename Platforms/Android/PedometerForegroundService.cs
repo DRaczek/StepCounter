@@ -29,16 +29,22 @@ namespace StepCounter.Platforms.Android
             var notification = BuildNotification(_stepCounterService?.DailySteps ?? 0);
             StartForeground(NotificationId, notification);
 
+            // policz kiedy jest kolejna pełna minuta
+            var now = DateTime.Now;
+            var nextFullMinute = now.AddMinutes(1).AddSeconds(-now.Second).AddMilliseconds(-now.Millisecond);
+            var initialDelay = nextFullMinute - now;
+
             _timer = new Timer(
-                callback: state =>
+                callback: async state =>
                 {
                     var steps = _stepCounterService?.DailySteps ?? 0;
                     var updatedNotification = BuildNotification(steps);
                     var notificationManager = NotificationManagerCompat.From(this);
-                    notificationManager.Notify(NotificationId, updatedNotification);
+                    await _stepCounterService!.SaveDailyStepsToDbAsync();
+                    notificationManager!.Notify(NotificationId, updatedNotification);
                 },
                 state: null,
-                dueTime: TimeSpan.Zero,
+                dueTime: initialDelay,
                 period: TimeSpan.FromMinutes(1)
             );
         }
