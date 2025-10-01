@@ -42,7 +42,6 @@ namespace StepCounter.Services
             if (DateTime.Today <= lastResetDate) return;
 
             DailySteps = 0;
-            previousNumberOfSteps = 0;
             lastResetDate = DateTime.Today;
         }
 
