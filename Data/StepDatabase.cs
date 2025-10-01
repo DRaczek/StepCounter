@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using SQLite;
 using StepCounter.Models;
 
@@ -23,7 +20,10 @@ namespace StepCounter.Data
             => _database.Table<DailyStep>().FirstOrDefaultAsync(s => s.Date == date.Date);
 
         public Task<int> SaveStepAsync(DailyStep step)
-            => _database.InsertOrReplaceAsync(step);
+            => _database.InsertAsync(step);
+
+        public Task<int> UpdateStepAsync(DailyStep step)
+            => _database.UpdateAsync(step);
 
         public Task<int> DeleteStepAsync(DailyStep step)
             => _database.DeleteAsync(step);

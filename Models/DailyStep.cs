@@ -8,7 +8,7 @@ namespace StepCounter.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        [Indexed, NotNull]
+        [Indexed(Unique = true), NotNull]
         public DateTime Date { get; set; }
 
         [NotNull]

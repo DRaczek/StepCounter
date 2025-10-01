@@ -49,12 +49,16 @@ namespace StepCounter.Services
         {
             ResetIfNewDay();
             var today = DateTime.Today;
-            var stepEntity = await stepDatabase.GetStepForDateAsync(today)
-                             ?? new DailyStep { Date = today };
-
-            stepEntity.Steps = DailySteps;
-
-            await stepDatabase.SaveStepAsync(stepEntity);
+            var stepEntity = await stepDatabase.GetStepForDateAsync(today);
+            if (stepEntity == null)
+            {
+                await stepDatabase.SaveStepAsync(new DailyStep { Date = today, Steps = DailySteps });
+            }
+            else
+            {
+                stepEntity.Steps = DailySteps;
+                await stepDatabase.UpdateStepAsync(stepEntity);
+            }
         }
 
         public void Dispose()
