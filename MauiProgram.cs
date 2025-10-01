@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Plugin.Maui.Pedometer;
 using StepCounter.Data;
+using StepCounter.Helpers;
 using StepCounter.Services;
 using StepCounter.ViewModels;
 
@@ -21,6 +22,8 @@ namespace StepCounter
 
             builder.Services.AddSingleton<IPedometer>(Pedometer.Default);
             builder.Services.AddSingleton<StepCounterService>();
+
+            builder.Services.AddSingleton<Utils>();
 
             string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "steps.db3");
             builder.Services.AddSingleton(new StepDatabase(dbPath));

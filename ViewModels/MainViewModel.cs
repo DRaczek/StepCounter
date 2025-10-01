@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using StepCounter.Data;
+using StepCounter.Helpers;
 using StepCounter.Models;
 using StepCounter.Services;
 using System.Collections.ObjectModel;
@@ -11,31 +12,34 @@ namespace StepCounter.ViewModels
         private readonly StepCounterService stepCounterService;
         private readonly SettingsViewModel settingsViewModel;
         private readonly StepDatabase stepDatabase;
+        private readonly Utils utils;
 
         public int DailySteps => stepCounterService.DailySteps;
-
         public int DailyStepGoal => settingsViewModel.DailyStepGoal;
+        public double DistanceKm => stepCounterService.DistanceKm;
+        public double Calories => stepCounterService.Calories;
 
         [ObservableProperty]
         public ObservableCollection<DailyStep> stepHistory = new();
 
-        public MainViewModel(StepCounterService stepCounterService, StepDatabase stepDatabase, SettingsViewModel settingsViewModel)
+        public MainViewModel(
+            StepCounterService stepCounterService,
+            StepDatabase stepDatabase,
+            SettingsViewModel settingsViewModel,
+            Utils utils)
         {
             this.stepCounterService = stepCounterService;
             this.stepDatabase = stepDatabase;
             this.settingsViewModel = settingsViewModel;
+            this.utils = utils;
 
-            stepCounterService.PropertyChanged += (s, e) =>
+            utils.ForwardProperties( stepCounterService, new List<string>
             {
-                if (e.PropertyName == nameof(StepCounterService.DailySteps))
-                    OnPropertyChanged(nameof(DailySteps));
-            };
-
-            settingsViewModel.PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(SettingsViewModel.DailyStepGoal))
-                    OnPropertyChanged(nameof(DailyStepGoal));
-            };
+                nameof(StepCounterService.DailySteps),
+                nameof(StepCounterService.DistanceKm),
+                nameof(StepCounterService.Calories)
+            }, OnPropertyChanged);
+            utils.ForwardProperty(settingsViewModel, nameof(SettingsViewModel.DailyStepGoal), OnPropertyChanged);
 
             _ = LoadHistoryAsync();
         }
