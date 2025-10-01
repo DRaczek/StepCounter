@@ -25,6 +25,7 @@ namespace StepCounter.Platforms.Android
             CreateNotificationChannel();
 
             _stepCounterService = MauiApplication.Current.Services.GetService<StepCounterService>();
+            _ = _stepCounterService?.UpdateDailyStepsFromDatabase();
 
             var notification = BuildNotification(_stepCounterService?.DailySteps ?? 0);
             StartForeground(NotificationId, notification);

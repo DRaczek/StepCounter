@@ -22,8 +22,17 @@ namespace StepCounter.Services
             this.pedometer = pedometer;
             this.stepDatabase = stepDatabase;
             pedometer.ReadingChanged += OnReadingChanged;
-
             pedometer.Start();
+            _ = UpdateDailyStepsFromDatabase();
+        }
+
+        public async Task UpdateDailyStepsFromDatabase()
+        {
+            DailyStep? dailyStep = await stepDatabase.GetStepForDateAsync(DateTime.Today);
+            if(dailyStep != null)
+            {
+                DailySteps = dailyStep.Steps;
+            }
         }
 
         private void OnReadingChanged(object? sender, PedometerData reading)
