@@ -7,7 +7,14 @@
 
     <VerticalStackLayout Padding="30" Spacing="20">
         <Label Text="Kroki dziś" FontAttributes="Bold" FontSize="20" HorizontalOptions="Center" />
-        <Label Text="{Binding DailySteps}" FontSize="48" HorizontalOptions="Center" />
+        <Label  FontSize="48" HorizontalOptions="Center" >
+            <Label.Text>
+                <MultiBinding StringFormat="{}{0}/{1}">
+                    <Binding Path="DailySteps" />
+                    <Binding Path="DailyStepGoal" />
+                </MultiBinding>
+            </Label.Text>
+        </Label>
 
         <Label Text="Historia ostatnich dni:" FontAttributes="Bold" FontSize="16" Margin="0,20,0,10"/>
 

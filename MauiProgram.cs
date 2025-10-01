@@ -27,6 +27,9 @@ namespace StepCounter
 
             builder.Services.AddTransient<MainViewModel>();
             builder.Services.AddTransient<MainPage>();
+
+            builder.Services.AddTransient<SettingsViewModel>();
+            builder.Services.AddTransient<SettingsPage>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
