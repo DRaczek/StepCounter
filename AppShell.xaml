@@ -7,10 +7,10 @@
     Title="StepCounter">
 
     <ShellContent
-        Title="Home"
+        Title="Strona główna"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
-    
+
     <ShellContent
         Title="Ustawienia" 
         ContentTemplate="{DataTemplate local:SettingsPage}" 

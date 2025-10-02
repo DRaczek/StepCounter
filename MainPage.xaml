@@ -20,7 +20,7 @@
 
         <Label Text="Historia ostatnich dni:" FontAttributes="Bold" FontSize="16" Margin="0,20,0,10"/>
 
-        <CollectionView ItemsSource="{Binding StepHistory}">
+        <CollectionView ItemsSource="{Binding RecentSteps}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <HorizontalStackLayout Padding="10" Spacing="15">
@@ -30,6 +30,9 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <Button Text="Pokaż wszystkie dni"
+                Command="{Binding ShowHistoryCommand}" />
 
         <Label Text="Uwaga: wymagane uprawnienia i obsługa urządzenia z sensorami." 
                FontSize="12" HorizontalOptions="Center" TextColor="Gray"/>

@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using StepCounter.Data;
 using StepCounter.Helpers;
 using StepCounter.Models;
@@ -20,7 +21,7 @@ namespace StepCounter.ViewModels
         public double Calories => stepCounterService.Calories;
 
         [ObservableProperty]
-        public ObservableCollection<DailyStep> stepHistory = new();
+        private ObservableCollection<DailyStep> recentSteps = new();
 
         public MainViewModel(
             StepCounterService stepCounterService,
@@ -41,13 +42,19 @@ namespace StepCounter.ViewModels
             }, OnPropertyChanged);
             utils.ForwardProperty(settingsViewModel, nameof(SettingsViewModel.DailyStepGoal), OnPropertyChanged);
 
-            _ = LoadHistoryAsync();
+            _ = LoadRecentStepsAsync();
         }
 
-        private async Task LoadHistoryAsync()
+        private async Task LoadRecentStepsAsync()
         {
-            var steps = await stepDatabase.GetStepsAsync();
-            StepHistory = new ObservableCollection<DailyStep>(steps.Where(step => step.Date < DateTime.Today));
+            var steps = await stepDatabase.GetStepsAsync(3);
+            RecentSteps = new ObservableCollection<DailyStep>(steps);
+        }
+
+        [RelayCommand]
+        private async Task ShowHistory()
+        {
+            await Shell.Current.GoToAsync(nameof(HistoryPage));
         }
     }
 }

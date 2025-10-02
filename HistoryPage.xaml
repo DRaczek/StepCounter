@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:StepCounter.ViewModels"
+             x:Class="StepCounter.HistoryPage"
+             Title="Historia kroków">
+
+    <ScrollView Padding="20">
+        <CollectionView ItemsSource="{Binding AllSteps}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout Padding="10" Spacing="15">
+                        <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}" FontSize="16" />
+                        <Label Text="{Binding Steps}" FontSize="16" FontAttributes="Bold"/>
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ScrollView>
+
+</ContentPage>

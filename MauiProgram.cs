@@ -33,6 +33,9 @@ namespace StepCounter
 
             builder.Services.AddTransient<SettingsViewModel>();
             builder.Services.AddTransient<SettingsPage>();
+
+            builder.Services.AddTransient<HistoryViewModel>();
+            builder.Services.AddTransient<HistoryPage>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

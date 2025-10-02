@@ -16,6 +16,14 @@ namespace StepCounter.Data
         public Task<List<DailyStep>> GetStepsAsync()
             => _database.Table<DailyStep>().OrderByDescending(s => s.Date).ToListAsync();
 
+        public Task<List<DailyStep>> GetStepsAsync(int limit)
+            => _database.Table<DailyStep>()
+                        .Where(s => s.Date < DateTime.Today)
+                        .OrderByDescending(s => s.Date)
+                        .Take(limit)
+                        .Skip(0)
+                        .ToListAsync();
+
         public Task<DailyStep?> GetStepForDateAsync(DateTime date)
             => _database.Table<DailyStep>().FirstOrDefaultAsync(s => s.Date == date.Date);
 
