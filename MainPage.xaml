@@ -3,19 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:StepCounter.ViewModels"
              x:Class="StepCounter.MainPage"
-             xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:progressBar="clr-namespace:Syncfusion.Maui.Toolkit.ProgressBar;assembly=Syncfusion.Maui.Toolkit"
              Title="Krokomierz">
 
     <VerticalStackLayout Padding="30" Spacing="20">
-        <Label Text="Kroki dziś" FontAttributes="Bold" FontSize="20" HorizontalOptions="Center" />
-        <Label  FontSize="48" HorizontalOptions="Center" >
-            <Label.Text>
-                <MultiBinding StringFormat="{}{0}/{1}">
-                    <Binding Path="DailySteps" />
-                    <Binding Path="DailyStepGoal" />
-                </MultiBinding>
-            </Label.Text>
-        </Label>
+        <progressBar:SfCircularProgressBar
+            x:Name="stepsProgressBar"
+            BackgroundColor="Transparent"
+            Progress="{Binding DailySteps}"
+            Maximum="{Binding DailyStepGoal}"
+            ProgressThickness="12"
+            TrackThickness="12"
+            TrackRadiusFactor="0.9"
+            HeightRequest="180"
+            WidthRequest="180"
+            HorizontalOptions="Center">
+            <progressBar:SfCircularProgressBar.GradientStops>
+                <progressBar:ProgressGradientStop Color="#d90932" Value="0"/>
+                <progressBar:ProgressGradientStop Color="#09db4a" Value="{Binding DailyStepGoal}"/>
+            </progressBar:SfCircularProgressBar.GradientStops>
+            <progressBar:SfCircularProgressBar.Content>
+                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label 
+                        FontSize="Large"
+                        HorizontalOptions="Center"
+                        TextColor="#7e7ed6">
+                        <Label.Text>
+                            <MultiBinding StringFormat="{}{0}/{1}">
+                                <Binding Path="DailySteps" />
+                                <Binding Path="DailyStepGoal" />
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                </StackLayout>
+                
+            </progressBar:SfCircularProgressBar.Content>
+        </progressBar:SfCircularProgressBar>
         <Label Text="{Binding Calories, StringFormat='Liczba kalorii : {0:F0}'}"></Label>
         <Label Text="{Binding DistanceKm, StringFormat='Dystans : {0:F3}km'}"></Label>
 
