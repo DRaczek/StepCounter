@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:StepCounter.ViewModels"
              x:Class="StepCounter.MainPage"
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker;assembly=Syncfusion.Maui.Toolkit"
              Title="Krokomierz">
 
     <VerticalStackLayout Padding="30" Spacing="20">
