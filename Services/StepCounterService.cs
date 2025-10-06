@@ -31,7 +31,18 @@ namespace StepCounter.Services
             this.pedometer = pedometer;
             this.stepDatabase = stepDatabase;
             pedometer.ReadingChanged += OnReadingChanged;
-            pedometer.Start();
+            try
+            {
+                pedometer.Start();
+            }
+            catch (FeatureNotSupportedException)
+            {
+                Shell.Current.DisplayAlert("Error", "Twoje urządzenie nie posiada wbudowanego licznika kroków. Aplikacja nie będzie działać w sposób do tego przeznaczony.", "OK");
+            }
+            catch (Exception ex)
+            {
+                Shell.Current.DisplayAlert("Error", $"Uruchomienie krokomierza nie powiodło się. {ex.Message}", "OK");
+            }
             _ = UpdateDailyStepsFromDatabase();
         }
 
