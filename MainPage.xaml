@@ -41,8 +41,45 @@
                 
             </progressBar:SfCircularProgressBar.Content>
         </progressBar:SfCircularProgressBar>
-            <Label Text="{Binding Calories, StringFormat='Liczba kalorii : {0:F0}'}"></Label>
-            <Label Text="{Binding DistanceKm, StringFormat='Dystans : {0:F3}km'}"></Label>
+        <Grid ColumnDefinitions="*,*">
+            <StackLayout 
+                Orientation="Vertical"
+                Grid.Column="0"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Label 
+                    Text="{Binding Calories, StringFormat='{}{0:F0} kcal'}"
+                    HorizontalOptions="Center"
+                    Margin="0,0,0,10"
+                    TextColor="#7e7ed6"/>
+                <Frame CornerRadius="50"  Padding="10">
+                    <Image 
+                    Source="kcal.png"
+                    WidthRequest="40"
+                    HeightRequest="40"/>
+                </Frame>
+            </StackLayout>
+            <StackLayout 
+                Orientation="Vertical"
+                Grid.Column="1"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Label
+                    Text="{Binding DistanceKm, StringFormat='{}{0:F2} km'}"
+                    HorizontalOptions="Center"
+                    Margin="0,0,0,10"
+                    TextColor="#7e7ed6"/>
+                <Frame CornerRadius="50" Padding="10">
+                    <Image 
+                        Source="distance.png"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        BackgroundColor="White"/>
+                </Frame>
+                
+            </StackLayout>
+        </Grid>
+
 
         <Label Text="Historia ostatnich dni:" FontAttributes="Bold" FontSize="16" Margin="0,20,0,10"/>
 
