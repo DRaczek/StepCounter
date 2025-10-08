@@ -4,6 +4,7 @@ using StepCounter.Data;
 using StepCounter.Helpers;
 using StepCounter.Services;
 using StepCounter.ViewModels;
+using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 
 namespace StepCounter
@@ -22,6 +23,7 @@ namespace StepCounter
                 });
 
             builder.ConfigureSyncfusionToolkit();
+            builder.ConfigureSyncfusionCore();
 
             builder.Services.AddSingleton<IPedometer>(Pedometer.Default);
             builder.Services.AddSingleton<StepCounterService>();

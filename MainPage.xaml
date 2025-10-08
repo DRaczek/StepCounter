@@ -5,6 +5,7 @@
              x:Class="StepCounter.MainPage"
              xmlns:progressBar="clr-namespace:Syncfusion.Maui.Toolkit.ProgressBar;assembly=Syncfusion.Maui.Toolkit"
              xmlns:converter="clr-namespace:StepCounter.Converters"
+             xmlns:listView="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
              Title="Krokomierz">
 
     <ContentPage.Resources>
@@ -14,8 +15,9 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <VerticalStackLayout Padding="30" Spacing="20">
-        <progressBar:SfCircularProgressBar
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+            <progressBar:SfCircularProgressBar
             x:Name="stepsProgressBar"
             BackgroundColor="Transparent"
             Progress="{Binding DailySteps}"
@@ -28,98 +30,134 @@
             HorizontalOptions="Center"
             AnimationEasing="{x:Static Easing.CubicOut}"
             AnimationDuration="3000">
-            <progressBar:SfCircularProgressBar.GradientStops>
-                <progressBar:ProgressGradientStop Color="#d90932" Value="0"/>
-                <progressBar:ProgressGradientStop Color="#09db4a" Value="{Binding DailyStepGoal}"/>
-            </progressBar:SfCircularProgressBar.GradientStops>
-            <progressBar:SfCircularProgressBar.Content>
-                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                    <Label 
+                <progressBar:SfCircularProgressBar.GradientStops>
+                    <progressBar:ProgressGradientStop Color="#d90932" Value="0"/>
+                    <progressBar:ProgressGradientStop Color="#09db4a" Value="{Binding DailyStepGoal}"/>
+                </progressBar:SfCircularProgressBar.GradientStops>
+                <progressBar:SfCircularProgressBar.Content>
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label 
                         FontSize="Large"
                         HorizontalOptions="Center"
                         TextColor="#7e7ed6">
-                        <Label.Text>
-                            <MultiBinding StringFormat="{}{0}/{1}">
-                                <Binding Path="DailySteps" />
-                                <Binding Path="DailyStepGoal" />
-                            </MultiBinding>
-                        </Label.Text>
-                    </Label>
-                </StackLayout>
-                
-            </progressBar:SfCircularProgressBar.Content>
-        </progressBar:SfCircularProgressBar>
-        <Grid ColumnDefinitions="*,*">
-            <StackLayout 
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0}/{1}">
+                                    <Binding Path="DailySteps" />
+                                    <Binding Path="DailyStepGoal" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                    </StackLayout>
+
+                </progressBar:SfCircularProgressBar.Content>
+            </progressBar:SfCircularProgressBar>
+            <Grid ColumnDefinitions="*,*">
+                <StackLayout 
                 Orientation="Vertical"
                 Grid.Column="0"
                 HorizontalOptions="Center"
                 VerticalOptions="Center">
-                <Label 
+                    <Label 
                     Text="{Binding DailySteps, Converter={StaticResource CaloriesConverter}}"
                     HorizontalOptions="Center"
                     Margin="0,0,0,10"
                     TextColor="#7e7ed6"/>
-                <Frame CornerRadius="50"  Padding="10">
-                    <Image 
+                    <Frame CornerRadius="50"  Padding="10">
+                        <Image 
                     Source="kcal.png"
                     WidthRequest="40"
                     HeightRequest="40"/>
-                </Frame>
-            </StackLayout>
-            <StackLayout 
+                    </Frame>
+                </StackLayout>
+                <StackLayout 
                 Orientation="Vertical"
                 Grid.Column="1"
                 HorizontalOptions="Center"
                 VerticalOptions="Center">
-                <Label
+                    <Label
                     Text="{Binding DailySteps, Converter={StaticResource DistanceConverter}}"
                     HorizontalOptions="Center"
                     Margin="0,0,0,10"
                     TextColor="#7e7ed6"/>
-                <Frame CornerRadius="50" Padding="10">
-                    <Image 
+                    <Frame CornerRadius="50" Padding="10">
+                        <Image 
                         Source="distance.png"
                         WidthRequest="40"
                         HeightRequest="40"
                         BackgroundColor="White"/>
-                </Frame>
-                
-            </StackLayout>
-        </Grid>
+                    </Frame>
 
-        <BoxView HeightRequest="1" Color="DarkSlateGray" Margin="0,20" CornerRadius="50"/>
+                </StackLayout>
+            </Grid>
 
-        <Grid ColumnDefinitions="Auto,*,*,Auto">
-            <Label 
+            <BoxView HeightRequest="1" Color="DarkSlateGray" Margin="0,20" CornerRadius="50"/>
+
+            <Grid ColumnDefinitions="Auto,*,*,Auto">
+                <Label 
                 Text="Past days: "
                 FontAttributes="Bold"
                 FontSize="Medium"
                 VerticalOptions="Center"
                 Grid.Column="0"/>
-            <Label 
+                <Label 
                 Text="View more"
                 FontSize="Small"
                 VerticalOptions="Center"
                 TextColor="Gray"
                 TextDecorations="Underline"
                 Grid.Column="3">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ShowHistoryCommand}" />
-                </Label.GestureRecognizers>
-            </Label>
-        </Grid>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ShowHistoryCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
 
-        <CollectionView ItemsSource="{Binding RecentSteps}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <HorizontalStackLayout Padding="10" Spacing="15">
-                        <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}" FontSize="16" />
-                        <Label Text="{Binding Steps, StringFormat='Kroki: {0}'}" FontSize="16" FontAttributes="Bold"/>
-                    </HorizontalStackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        
-    </VerticalStackLayout>
+            <listView:SfListView
+                ItemsSource="{Binding RecentSteps}"
+                SelectionMode="None"
+                BackgroundColor="Transparent"
+                ItemSize="120"
+                >
+                <listView:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="15" CornerRadius="30"  BackgroundColor="#404040" Margin="10">
+                            <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto, Auto" BackgroundColor="Transparent">
+                                <Label 
+                                Text="{Binding Date, StringFormat='{0:dddd, dd MMMM}'}"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                Grid.Row="0"
+                                Margin="0,0,0, 10"/>
+                                <StackLayout
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Grid.Row="1"
+                                Grid.Column="0">
+                                    <Image Source="kcal.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="{Binding Steps}"/>
+                                </StackLayout>
+                                <StackLayout
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Grid.Row="1"
+                                Grid.Column="1">
+                                    <Image Source="distance.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="{Binding Steps, Converter={StaticResource DistanceConverter}}"/>
+                                </StackLayout>
+                                <StackLayout
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Grid.Row="1"
+                                Grid.Column="2">
+                                    <Image Source="kcal.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="{Binding Steps, Converter={StaticResource CaloriesConverter}}"/>
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+
+                    </DataTemplate>
+                </listView:SfListView.ItemTemplate>
+            </listView:SfListView>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
