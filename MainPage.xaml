@@ -4,7 +4,15 @@
              xmlns:vm="clr-namespace:StepCounter.ViewModels"
              x:Class="StepCounter.MainPage"
              xmlns:progressBar="clr-namespace:Syncfusion.Maui.Toolkit.ProgressBar;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:converter="clr-namespace:StepCounter.Converters"
              Title="Krokomierz">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DistanceConverter x:Key="DistanceConverter" />
+            <converter:CaloriesConverter x:Key="CaloriesConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <VerticalStackLayout Padding="30" Spacing="20">
         <progressBar:SfCircularProgressBar
@@ -48,7 +56,7 @@
                 HorizontalOptions="Center"
                 VerticalOptions="Center">
                 <Label 
-                    Text="{Binding Calories, StringFormat='{}{0:F0} kcal'}"
+                    Text="{Binding DailySteps, Converter={StaticResource CaloriesConverter}}"
                     HorizontalOptions="Center"
                     Margin="0,0,0,10"
                     TextColor="#7e7ed6"/>
@@ -65,7 +73,7 @@
                 HorizontalOptions="Center"
                 VerticalOptions="Center">
                 <Label
-                    Text="{Binding DistanceKm, StringFormat='{}{0:F2} km'}"
+                    Text="{Binding DailySteps, Converter={StaticResource DistanceConverter}}"
                     HorizontalOptions="Center"
                     Margin="0,0,0,10"
                     TextColor="#7e7ed6"/>

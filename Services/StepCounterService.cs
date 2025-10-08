@@ -15,12 +15,6 @@ namespace StepCounter.Services
         [ObservableProperty]
         private int dailySteps;
 
-        [ObservableProperty]
-        private double distanceKm;
-
-        [ObservableProperty]
-        private double calories;
-
         private readonly IPedometer pedometer;
         private readonly StepDatabase stepDatabase;
         private int previousNumberOfSteps = 0;
@@ -54,18 +48,6 @@ namespace StepCounter.Services
                 DailySteps = dailyStep.Steps;
             }
         }
-
-        partial void OnDailyStepsChanged(int value)
-        {
-            CalculateDistanceAndCalories();
-        }
-
-        private void CalculateDistanceAndCalories()
-        {
-            DistanceKm = (DailySteps * StepLengthMeters) / 1000.0;
-            Calories = DailySteps * CaloriesPerStep;
-        }
-
 
         private void OnReadingChanged(object? sender, PedometerData reading)
         {
