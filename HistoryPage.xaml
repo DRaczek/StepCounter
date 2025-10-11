@@ -1,21 +1,120 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sfCarousel="clr-namespace:Syncfusion.Maui.Toolkit.Carousel;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:sfChart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
+             xmlns:converter="clr-namespace:StepCounter.Converters"
              xmlns:vm="clr-namespace:StepCounter.ViewModels"
              x:Class="StepCounter.HistoryPage"
-             Title="Historia kroków">
+             Title="History">
 
-    <ScrollView Padding="20">
-        <CollectionView ItemsSource="{Binding AllSteps}">
-            <CollectionView.ItemTemplate>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DistanceConverter x:Key="DistanceConverter" />
+            <converter:CaloriesConverter x:Key="CaloriesConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout Padding="20" Spacing="25">
+
+        <sfCarousel:SfCarousel ItemHeight="200"
+                               ItemsSource="{Binding AllSteps}"
+                               SelectedItemOffset="50"
+                               ScaleOffset="0.5">
+            <sfCarousel:SfCarousel.ItemTemplate>
                 <DataTemplate>
-                    <HorizontalStackLayout Padding="10" Spacing="15">
-                        <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}" FontSize="16" />
-                        <Label Text="{Binding Steps}" FontSize="16" FontAttributes="Bold"/>
-                    </HorizontalStackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </ScrollView>
+                    <Frame 
+                        CornerRadius="20"
+                        Padding="10"
+                        HasShadow="True"
+                        BackgroundColor="#404040">
+                        <Grid 
+                            ColumnDefinitions="*,*,*"
+                            RowDefinitions="Auto, Auto"
+                            BackgroundColor="Transparent">
+                            <Label 
+                                Text="{Binding Date, StringFormat='{0:dd MMM}'}"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                Grid.Row="0"
+                                Margin="0,0,0,50"
+                                HorizontalOptions="Center"/>
+                            <StackLayout
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Grid.Row="1"
+                                Grid.Column="0">
+                                <Image Source="steps.png" WidthRequest="20" HeightRequest="20"/>
+                                <Label Text="{Binding Steps}"/>
+                            </StackLayout>
+                            <StackLayout
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Grid.Row="1"
+                                Grid.Column="1">
+                                <Image Source="distance.png" WidthRequest="20" HeightRequest="20"/>
+                                <Label Text="{Binding Steps, Converter={StaticResource DistanceConverter}}"/>
+                            </StackLayout>
+                            <StackLayout
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Grid.Row="1"
+                                Grid.Column="2">
+                                <Image Source="kcal.png" WidthRequest="20" HeightRequest="20"/>
+                                <Label Text="{Binding Steps, Converter={StaticResource CaloriesConverter}}"/>
+                            </StackLayout>
+                        </Grid>
 
+                    </Frame>
+                </DataTemplate>
+            </sfCarousel:SfCarousel.ItemTemplate>
+        </sfCarousel:SfCarousel>
+
+        <Label Text="Last 30 days"
+               FontAttributes="Bold"
+               FontSize="18"
+               TextColor="#7e7ed6"
+               HorizontalOptions="Start" />
+
+        <Frame CornerRadius="12" HasShadow="True" Padding="8" BackgroundColor="#a6a6a6">
+            <sfChart:SfCartesianChart>
+                <sfChart:SfCartesianChart.Resources>
+                    <DataTemplate x:Key="tooltipTemplate">
+                        <StackLayout>
+                            <Label Text="{Binding Item.Date, StringFormat='{0:dddd, dd MMMM}'}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"/>
+                            <Label Text="{Binding Item.Steps}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </sfChart:SfCartesianChart.Resources>
+
+                <sfChart:SfCartesianChart.XAxes>
+                    <sfChart:DateTimeAxis IntervalType="Days"
+                                          Interval="4"
+                                          LabelRotation="-45"/>
+                </sfChart:SfCartesianChart.XAxes>
+
+                <sfChart:SfCartesianChart.YAxes>
+                    <sfChart:NumericalAxis/>
+                </sfChart:SfCartesianChart.YAxes>
+
+                <sfChart:SfCartesianChart.TooltipBehavior>
+                    <sfChart:ChartTooltipBehavior />
+                </sfChart:SfCartesianChart.TooltipBehavior>
+
+                <sfChart:LineSeries
+                    TooltipTemplate="{StaticResource tooltipTemplate}"
+                    ItemsSource="{Binding LastMonthSteps}"
+                    XBindingPath="Date"
+                    YBindingPath="Steps"
+                    EnableAnimation="True"
+                    Fill="Black"
+                    ShowMarkers="True"
+                    EnableTooltip="True"/>
+            </sfChart:SfCartesianChart>
+        </Frame>
+
+    </VerticalStackLayout>
 </ContentPage>

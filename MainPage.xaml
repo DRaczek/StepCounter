@@ -39,7 +39,8 @@
                         <Label 
                         FontSize="Large"
                         HorizontalOptions="Center"
-                        TextColor="#7e7ed6">
+                        TextColor="#7e7ed6"
+                        LineBreakMode="NoWrap">    
                             <Label.Text>
                                 <MultiBinding StringFormat="{}{0}/{1}">
                                     <Binding Path="DailySteps" />
