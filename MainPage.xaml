@@ -47,6 +47,7 @@
                                 </MultiBinding>
                             </Label.Text>
                         </Label>
+                        <Image Source="steps.png" HorizontalOptions="Center" WidthRequest="50" HeightRequest="50"/>
                     </StackLayout>
 
                 </progressBar:SfCircularProgressBar.Content>
@@ -133,7 +134,7 @@
                                 VerticalOptions="Center"
                                 Grid.Row="1"
                                 Grid.Column="0">
-                                    <Image Source="kcal.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Image Source="steps.png" WidthRequest="20" HeightRequest="20"/>
                                     <Label Text="{Binding Steps}"/>
                                 </StackLayout>
                                 <StackLayout
