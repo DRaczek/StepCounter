@@ -16,7 +16,7 @@ namespace StepCounter.ViewModels
         private readonly Utils utils;
 
         public int DailySteps => stepCounterService.DailySteps;
-        public int DailyStepGoal => settingsViewModel.DailyStepGoal;
+        public int DailyStepGoal => (int)settingsViewModel.DailyStepGoal;
 
         [ObservableProperty]
         private ObservableCollection<DailyStep> recentSteps = new();

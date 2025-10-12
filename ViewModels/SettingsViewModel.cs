@@ -10,7 +10,7 @@ namespace StepCounter.ViewModels
         private const int DefaultGoal = 5000;
 
         [ObservableProperty]
-        private int dailyStepGoal;
+        private double dailyStepGoal;
 
         public SettingsViewModel()
         {
@@ -20,7 +20,7 @@ namespace StepCounter.ViewModels
         [RelayCommand]
         private void SaveGoal()
         {
-            Preferences.Set(DailyGoalKey, DailyStepGoal);
+            Preferences.Set(DailyGoalKey, (int)DailyStepGoal);
         }
     }
 }
