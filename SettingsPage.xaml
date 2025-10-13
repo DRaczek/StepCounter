@@ -6,7 +6,7 @@
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
              xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
              x:Class="StepCounter.SettingsPage"
-             Title="Ustawienia">
+             Title="Settings">
 
     <VerticalStackLayout Spacing="20">
         <Grid ColumnDefinitions="50,Auto,*" Padding="20,5">
