@@ -37,12 +37,12 @@ namespace StepCounter.Services
             {
                 Shell.Current.DisplayAlert("Error", $"Uruchomienie krokomierza nie powiodło się. {ex.Message}", "OK");
             }
-            _ = UpdateDailyStepsFromDatabase();
+            UpdateDailyStepsFromDatabase();
         }
 
-        public async Task UpdateDailyStepsFromDatabase()
+        public void UpdateDailyStepsFromDatabase()
         {
-            DailyStep? dailyStep = await stepDatabase.GetStepForDateAsync(DateTime.Today);
+            DailyStep? dailyStep = stepDatabase.GetStepForDateAsync(DateTime.Today).Result;
             if(dailyStep != null)
             {
                 DailySteps = dailyStep.Steps;
