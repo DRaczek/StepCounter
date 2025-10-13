@@ -43,7 +43,7 @@ namespace StepCounter.Services
         public void UpdateDailyStepsFromDatabase()
         {
             DailyStep? dailyStep = stepDatabase.GetStepForDateAsync(DateTime.Today).Result;
-            if(dailyStep != null)
+            if(dailyStep != null)   
             {
                 DailySteps = dailyStep.Steps;
             }
