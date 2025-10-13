@@ -16,9 +16,7 @@ namespace StepCounter.ViewModels
         private readonly Utils utils;
 
         public int DailySteps => stepCounterService.DailySteps;
-        public int DailyStepGoal => settingsViewModel.DailyStepGoal;
-        public double DistanceKm => stepCounterService.DistanceKm;
-        public double Calories => stepCounterService.Calories;
+        public int DailyStepGoal => (int)settingsViewModel.DailyStepGoal;
 
         [ObservableProperty]
         private ObservableCollection<DailyStep> recentSteps = new();
@@ -37,8 +35,6 @@ namespace StepCounter.ViewModels
             utils.ForwardProperties( stepCounterService, new List<string>
             {
                 nameof(StepCounterService.DailySteps),
-                nameof(StepCounterService.DistanceKm),
-                nameof(StepCounterService.Calories)
             }, OnPropertyChanged);
             utils.ForwardProperty(settingsViewModel, nameof(SettingsViewModel.DailyStepGoal), OnPropertyChanged);
 

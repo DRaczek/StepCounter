@@ -15,12 +15,6 @@ namespace StepCounter.Services
         [ObservableProperty]
         private int dailySteps;
 
-        [ObservableProperty]
-        private double distanceKm;
-
-        [ObservableProperty]
-        private double calories;
-
         private readonly IPedometer pedometer;
         private readonly StepDatabase stepDatabase;
         private int previousNumberOfSteps = 0;
@@ -31,30 +25,29 @@ namespace StepCounter.Services
             this.pedometer = pedometer;
             this.stepDatabase = stepDatabase;
             pedometer.ReadingChanged += OnReadingChanged;
-            pedometer.Start();
-            _ = UpdateDailyStepsFromDatabase();
+            try
+            {
+                pedometer.Start();
+            }
+            catch (FeatureNotSupportedException)
+            {
+                Shell.Current.DisplayAlert("Error", "Twoje urządzenie nie posiada wbudowanego licznika kroków. Aplikacja nie będzie działać w sposób do tego przeznaczony.", "OK");
+            }
+            catch (Exception ex)
+            {
+                Shell.Current.DisplayAlert("Error", $"Uruchomienie krokomierza nie powiodło się. {ex.Message}", "OK");
+            }
+            UpdateDailyStepsFromDatabase();
         }
 
-        public async Task UpdateDailyStepsFromDatabase()
+        public void UpdateDailyStepsFromDatabase()
         {
-            DailyStep? dailyStep = await stepDatabase.GetStepForDateAsync(DateTime.Today);
+            DailyStep? dailyStep = stepDatabase.GetStepForDateAsync(DateTime.Today).Result;
             if(dailyStep != null)
             {
                 DailySteps = dailyStep.Steps;
             }
         }
-
-        partial void OnDailyStepsChanged(int value)
-        {
-            CalculateDistanceAndCalories();
-        }
-
-        private void CalculateDistanceAndCalories()
-        {
-            DistanceKm = (DailySteps * StepLengthMeters) / 1000.0;
-            Calories = DailySteps * CaloriesPerStep;
-        }
-
 
         private void OnReadingChanged(object? sender, PedometerData reading)
         {

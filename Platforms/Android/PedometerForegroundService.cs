@@ -25,12 +25,11 @@ namespace StepCounter.Platforms.Android
             CreateNotificationChannel();
 
             _stepCounterService = MauiApplication.Current.Services.GetService<StepCounterService>();
-            _ = _stepCounterService?.UpdateDailyStepsFromDatabase();
+            _stepCounterService?.UpdateDailyStepsFromDatabase();
 
             var notification = BuildNotification(_stepCounterService?.DailySteps ?? 0);
             StartForeground(NotificationId, notification);
 
-            // policz kiedy jest kolejna pełna minuta
             var now = DateTime.Now;
             var nextFullMinute = now.AddMinutes(1).AddSeconds(-now.Second).AddMilliseconds(-now.Millisecond);
             var initialDelay = nextFullMinute - now;
@@ -38,10 +37,10 @@ namespace StepCounter.Platforms.Android
             _timer = new Timer(
                 callback: async state =>
                 {
+                    await _stepCounterService!.SaveDailyStepsToDbAsync();
                     var steps = _stepCounterService?.DailySteps ?? 0;
                     var updatedNotification = BuildNotification(steps);
                     var notificationManager = NotificationManagerCompat.From(this);
-                    await _stepCounterService!.SaveDailyStepsToDbAsync();
                     notificationManager!.Notify(NotificationId, updatedNotification);
                 },
                 state: null,
