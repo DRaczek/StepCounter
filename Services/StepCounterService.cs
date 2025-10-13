@@ -1,6 +1,4 @@
-﻿using System;
-using System.Timers;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using Plugin.Maui.Pedometer;
 using StepCounter.Data;
 using StepCounter.Models;

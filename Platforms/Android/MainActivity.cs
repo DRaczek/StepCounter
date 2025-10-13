@@ -19,6 +19,11 @@ namespace StepCounter
                 RequestPermissions(new[] { Android.Manifest.Permission.PostNotifications }, 0);
             }
 
+            if (CheckSelfPermission(Android.Manifest.Permission.ActivityRecognition) != Permission.Granted)
+            {
+                RequestPermissions(new[] { Android.Manifest.Permission.ActivityRecognition }, 0);
+            }
+
             var intent = new Intent(this, typeof(PedometerForegroundService));
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
                 StartForegroundService(intent);
