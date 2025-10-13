@@ -6,6 +6,7 @@
              xmlns:progressBar="clr-namespace:Syncfusion.Maui.Toolkit.ProgressBar;assembly=Syncfusion.Maui.Toolkit"
              xmlns:converter="clr-namespace:StepCounter.Converters"
              xmlns:listView="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+             xmlns:local="clr-namespace:StepCounter"
              Title="Krokomierz">
 
     <ContentPage.Resources>
@@ -113,14 +114,16 @@
                     </Label.GestureRecognizers>
                 </Label>
             </Grid>
-
-            <listView:SfListView
+            <RefreshView
+                IsRefreshing="{Binding IsRefreshing}"
+                Command="{Binding RefreshCommand}"
+                VerticalOptions="Fill"
+                HeightRequest="400">
+                <CollectionView
                 ItemsSource="{Binding RecentSteps}"
                 SelectionMode="None"
-                BackgroundColor="Transparent"
-                ItemSize="120"
-                >
-                <listView:SfListView.ItemTemplate>
+                BackgroundColor="Transparent">
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame Padding="15" CornerRadius="30"  BackgroundColor="#404040" Margin="10">
                             <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto, Auto" BackgroundColor="Transparent">
@@ -158,8 +161,9 @@
                         </Frame>
 
                     </DataTemplate>
-                </listView:SfListView.ItemTemplate>
-            </listView:SfListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            </RefreshView>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

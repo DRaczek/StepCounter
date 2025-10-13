@@ -20,6 +20,8 @@ namespace StepCounter.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<DailyStep> recentSteps = new();
+        [ObservableProperty]
+        private bool isRefreshing;
 
         public MainViewModel(
             StepCounterService stepCounterService,
@@ -51,6 +53,20 @@ namespace StepCounter.ViewModels
         private async Task ShowHistory()
         {
             await Shell.Current.GoToAsync(nameof(HistoryPage));
+        }
+
+        [RelayCommand]
+        private async Task Refresh()
+        {
+            IsRefreshing = true;
+            try
+            {
+                await LoadRecentStepsAsync();
+            }
+            finally
+            {
+                IsRefreshing = false;
+            }
         }
     }
 }
