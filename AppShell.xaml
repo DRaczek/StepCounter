@@ -5,14 +5,43 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:StepCounter"
     Title="StepCounter">
+    <Shell.FlyoutHeader>
+        <StackLayout>
+            <Image Source="logo_pedometer.png" Margin="20"/>
+            <BoxView HeightRequest="3" BackgroundColor="DarkSlateGray"/>
+        </StackLayout>
+    </Shell.FlyoutHeader>
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <StackLayout>
+                <Grid Padding="20" ColumnDefinitions="30,*">
+                    <Image 
+                        Source="{Binding Icon}"
+                        WidthRequest="24"
+                        HeightRequest="24" />
+                    <Label
+                        Grid.Column="1"
+                        Text="{Binding Title}"
+                        Margin="10,0,0,0"
+                        VerticalOptions="Center" />
+                </Grid>
+                <BoxView 
+                    HeightRequest="1"
+                    BackgroundColor="DarkSlateGray"/>
+            </StackLayout>
+            
+        </DataTemplate>
+    </Shell.ItemTemplate>
 
     <ShellContent
-        Title="Strona główna"
+        Title="Home"
+        Icon="home.png"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 
     <ShellContent
-        Title="Ustawienia" 
+        Title="Settings" 
+        Icon="settings.png"
         ContentTemplate="{DataTemplate local:SettingsPage}" 
         Route="SettingsPage"/>
 
