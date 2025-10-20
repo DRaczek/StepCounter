@@ -70,3 +70,14 @@ The app requests all necessary permissions.
 -  Permissions on the first launch are not applied correctly; sometimes the app needs to be restarted twice along with the foreground service for it to work as intended.
 
 > **Note:** UI was tested on only on 3 devices and the functionalities only on 1 (Galaxy M35). Since i don't have access to any IOS device I couldn't implement nor test the app on such device.
+
+
+<p align="center">
+  <img src="Images/ss1.jpg" width="45%" />
+  <img src="Images/ss2.jpg" width="45%" />
+</p>
+<p align="center">
+  <img src="Images/ss3.jpg" width="45%" />
+  <img src="Images/ss4.jpg" width="45%" />
+</p>
+
